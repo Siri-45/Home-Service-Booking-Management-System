@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:'Segoe UI',sans-serif;
+            background:#f1f5f9;
+        }
+
+        .header{
+
+            background:#0f172a;
+            color:white;
+            padding:18px 30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+        }
+
+        .header h2{
+            margin:0;
+        }
+
+        .header-right{
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+
+        .header-right a{
+
+            text-decoration:none;
+            padding:10px 18px;
+            border-radius:8px;
+            color:white;
+            font-weight:500;
+            position:relative;
+
+        }
+
+        .add-btn{
+            background:#2563eb;
+        }
+
+        .logout-btn{
+            background:#ef4444;
+        }
+
+        .provider-btn{
+            background:#10b981;
+        }
+
+        .notification{
+
+            position:absolute;
+            top:-8px;
+            right:-8px;
+            background:red;
+            color:white;
+            width:22px;
+            height:22px;
+            border-radius:50%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:12px;
+            font-weight:bold;
+
+        }
+
+        .container{
+            padding:30px;
+        }
+
+        .section{
+            margin-bottom:50px;
+        }
+
+        .section-title{
+
+            font-size:24px;
+            margin-bottom:20px;
+            color:#0f172a;
+            font-weight:700;
+
+        }
+
+        .cards{
+
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+            gap:20px;
+
+        }
+
+        .card{
+
+            background:white;
+            padding:22px;
+            border-radius:16px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.08);
+            border:none;
+
+        }
+
+        .card h3{
+
+            margin-top:0;
+            color:#1e293b;
+            margin-bottom:15px;
+
+        }
+
+        .card p{
+
+            margin:10px 0;
+            color:#475569;
+            line-height:1.5;
+
+        }
+
+        .status{
+
+            padding:6px 12px;
+            border-radius:6px;
+            color:white;
+            font-size:13px;
+            font-weight:bold;
+
+        }
+
+        .Pending{
+            background:#f59e0b;
+        }
+
+        .Assigned{
+            background:#3b82f6;
+        }
+
+        .Completed{
+            background:#10b981;
+        }
+
+        .btn{
+
+            display:inline-block;
+            margin-top:12px;
+            padding:10px 14px;
+            border-radius:8px;
+            text-decoration:none;
+            color:white;
+            font-size:14px;
+            border:none;
+
+        }
+
+        .btn-assign{
+            background:#f59e0b;
+        }
+
+        .empty-box{
+
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            color:#64748b;
+            box-shadow:0 5px 15px rgba(0,0,0,0.05);
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h2>Admin Dashboard</h2>
+
+    <div class="header-right">
+
+        <a href="/providers" class="provider-btn">
+
+            Providers
+
+            {% if unseen_count > 0 %}
+
+            <span class="notification">
+                {{unseen_count}}
+            </span>
+
+            {% endif %}
+
+        </a>
+
+        <a href="/add_service" class="add-btn">
+            Add Service
+        </a>
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <!-- NEW BOOKINGS -->
+
+    <div class="section">
+
+        <div class="section-title">
+            New Bookings
+        </div>
+
+        {% if new_bookings %}
+
+        <div class="cards">
+
+            {% for b in new_bookings %}
+
+            <div class="card">
+
+                <h3>{{b[2]}}</h3>
+
+                <p>
+                    <b>Customer:</b>
+                    {{b[1]}}
+                </p>
+
+                <p>
+                    <b>Date:</b>
+                    {{b[3]}}
+                </p>
+
+                <p>
+                    <b>Time Slot:</b>
+                    {{b[4]}}
+                </p>
+
+                <p>
+                    <b>Address:</b>
+                    {{b[5]}}
+                </p>
+
+                <p>
+                    <b>Problem:</b>
+                    {{b[6]}}
+                </p>
+
+                <p>
+                    <b>Service Type:</b>
+                    {{b[7]}}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+
+                    <span class="status Pending">
+                        {{b[8]}}
+                    </span>
+
+                </p>
+
+                <p>
+                    <b>Provider:</b>
+
+                    {% if b[9] %}
+                        {{b[9]}}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+
+                </p>
+
+                {% if not b[9] %}
+
+                <a href="/assign_provider_page/{{b[0]}}"
+                   class="btn btn-assign">
+
+                    Assign Provider
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            No New Bookings
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- ASSIGNED BOOKINGS -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Pending / In Progress Services
+        </div>
+
+        {% if pending_bookings %}
+
+        <div class="cards">
+
+            {% for b in pending_bookings %}
+
+            <div class="card">
+
+                <h3>{{b[2]}}</h3>
+
+                <p>
+                    <b>Customer:</b>
+                    {{b[1]}}
+                </p>
+
+                <p>
+                    <b>Date:</b>
+                    {{b[3]}}
+                </p>
+
+                <p>
+                    <b>Time Slot:</b>
+                    {{b[4]}}
+                </p>
+
+                <p>
+                    <b>Address:</b>
+                    {{b[5]}}
+                </p>
+
+                <p>
+                    <b>Problem:</b>
+                    {{b[6]}}
+                </p>
+
+                <p>
+                    <b>Service Type:</b>
+                    {{b[7]}}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+
+                    <span class="status Assigned">
+                        {{b[8]}}
+                    </span>
+
+                </p>
+
+                <p>
+                    <b>Provider:</b>
+                    {{b[9]}}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            No Pending Services
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- COMPLETED BOOKINGS -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Completed Services
+        </div>
+
+        {% if completed_bookings %}
+
+        <div class="cards">
+
+            {% for b in completed_bookings %}
+
+            <div class="card">
+
+                <h3>{{b[2]}}</h3>
+
+                <p>
+                    <b>Customer:</b>
+                    {{b[1]}}
+                </p>
+
+                <p>
+                    <b>Date:</b>
+                    {{b[3]}}
+                </p>
+
+                <p>
+                    <b>Time Slot:</b>
+                    {{b[4]}}
+                </p>
+
+                <p>
+                    <b>Address:</b>
+                    {{b[5]}}
+                </p>
+
+                <p>
+                    <b>Problem:</b>
+                    {{b[6]}}
+                </p>
+
+                <p>
+                    <b>Service Type:</b>
+                    {{b[7]}}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+
+                    <span class="status Completed">
+                        {{b[8]}}
+                    </span>
+
+                </p>
+
+                <p>
+                    <b>Provider:</b>
+                    {{b[9]}}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            No Completed Services
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

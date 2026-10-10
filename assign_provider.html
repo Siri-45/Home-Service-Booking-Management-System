@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Assign Provider</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body{
+            background:#f1f5f9;
+            font-family:'Segoe UI';
+        }
+
+        .box{
+
+            width:500px;
+            margin:60px auto;
+            background:white;
+            padding:30px;
+            border-radius:16px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.08);
+
+        }
+
+        h2{
+            margin-bottom:25px;
+            color:#0f172a;
+        }
+
+        select{
+
+            width:100%;
+            padding:12px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            margin-bottom:20px;
+
+        }
+
+        button{
+
+            background:#2563eb;
+            color:white;
+            border:none;
+            padding:12px 18px;
+            border-radius:8px;
+
+        }
+
+        .msg{
+
+            background:#fee2e2;
+            color:#991b1b;
+            padding:12px;
+            border-radius:8px;
+            margin-bottom:20px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Assign Provider</h2>
+
+    {% if message %}
+
+        <div class="msg">
+            {{message}}
+        </div>
+
+    {% endif %}
+
+    {% if providers %}
+
+    <form id="assignForm">
+
+        <select id="provider">
+
+            {% for p in providers %}
+
+            <option value="{{p[0]}}">
+
+                {{p[1]}}
+                -
+                {{p[3]}} Years Experience
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="button" onclick="assignProvider()">
+
+            Assign Provider
+
+        </button>
+
+    </form>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+function assignProvider(){
+
+    let provider =
+        document.getElementById("provider").value;
+
+    window.location.href =
+        "/assign_provider/{{booking_id}}/" + provider;
+
+}
+
+</script>
+
+</body>
+</html>

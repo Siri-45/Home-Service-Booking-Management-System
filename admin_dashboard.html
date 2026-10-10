@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background:#f4f6f9;
+            padding:20px;
+        }
+
+        h2{
+            color:#333;
+        }
+
+        .top-buttons{
+            margin-bottom:20px;
+        }
+
+        .top-buttons a{
+            text-decoration:none;
+            padding:10px 15px;
+            border-radius:5px;
+            color:white;
+            margin-right:10px;
+            font-weight:bold;
+        }
+
+        .add-btn{
+            background:#007bff;
+        }
+
+        .logout-btn{
+            background:red;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin-bottom:15px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status{
+            padding:5px 10px;
+            border-radius:5px;
+            color:white;
+            font-size:14px;
+            font-weight:bold;
+        }
+
+        .Pending{
+            background:orange;
+        }
+
+        .Approved{
+            background:green;
+        }
+
+        .Completed{
+            background:blue;
+        }
+
+        .actions{
+            margin-top:15px;
+        }
+
+        .actions a,
+        .actions button{
+
+            text-decoration:none;
+            padding:8px 14px;
+            border:none;
+            border-radius:5px;
+            color:white;
+            font-weight:bold;
+        }
+
+        .approve-btn{
+            background:green;
+        }
+
+        .complete-btn{
+            background:orange;
+        }
+
+        .done-btn{
+            background:gray;
+            cursor:not-allowed;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>Admin Dashboard</h2>
+
+<div class="top-buttons">
+
+    <a href="/add_service" class="add-btn">
+        Add Service
+    </a>
+
+    <a href="/logout" class="logout-btn">
+        Logout
+    </a>
+
+</div>
+
+<h3>All Bookings</h3>
+
+{% for b in data %}
+
+<div class="card">
+
+    <p><b>User:</b> {{b[1]}}</p>
+
+    <p><b>Service:</b> {{b[2]}}</p>
+
+    <p><b>Date:</b> {{b[3]}}</p>
+
+    <p>
+        <b>Status:</b>
+
+        <span class="status {{b[4]}}">
+            {{b[4]}}
+        </span>
+
+        
+    </p>
+
+    <div class="actions">
+
+        <!-- PENDING -->
+        {% if b[4] == 'Pending' %}
+
+            <a href="/update/{{b[0]}}/Approved"
+               class="approve-btn">
+
+               Approve
+
+            </a>
+
+        <!-- APPROVED -->
+        {% elif b[4] == 'Approved' %}
+
+            <a href="/update/{{b[0]}}/Completed"
+               class="complete-btn">
+
+               Complete
+
+            </a>
+
+        <!-- COMPLETED -->
+        {% elif b[4] == 'Completed' %}
+
+            <button disabled class="done-btn">
+                Service Completed
+            </button>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</body>
+</html>

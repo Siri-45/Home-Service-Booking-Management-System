@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Payment Gateway</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body{
+            background: #f1f2f6;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .navbar-box{
+            background: #2c3e50;
+            color: white;
+            padding: 18px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .window{
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .window-header{
+            background: #ecf0f1;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot{
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .red{ background: #ff5f56; }
+        .yellow{ background: #ffbd2e; }
+        .green{ background: #27c93f; }
+
+        .container-box{
+            padding: 30px;
+        }
+
+        .payment-methods{
+            display: flex;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .payment-box{
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .divider{
+            border-left: 2px dashed #ccc;
+        }
+
+        input{
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button{
+            width: 100%;
+            padding: 12px;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .upi-btn{
+            background: #8e44ad;
+        }
+
+        .card-btn{
+            background: #27ae60;
+        }
+
+        .amount-box{
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+
+        .qr-img{
+            width: 220px;
+            height: 220px;
+            border: 5px solid #ecf0f1;
+            border-radius: 10px;
+            display: block;
+            margin: 15px auto;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar-box">
+    🔒 Secure Home Service Payment Gateway
+</div>
+
+<div class="window">
+
+    <div class="window-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+    </div>
+
+    <div class="container-box">
+
+        <h2 style="text-align:center;">Checkout</h2>
+
+        <h4 style="text-align:center; color:#555;">
+            {{booking[1]}}
+        </h4>
+
+        <div class="amount-box">
+            Total Amount :
+            <strong style="color:#e74c3c;">
+                ₹{{booking[2]}}
+            </strong>
+        </div>
+
+        <div class="payment-methods">
+
+            <!-- QR PAYMENT -->
+            <div class="payment-box">
+
+                <h3 style="color:#8e44ad;">
+                    📱 Scan & Pay
+                </h3>
+
+                <p style="color:gray;">
+                    Pay using Google Pay, PhonePe or Paytm
+                </p>
+
+                <!-- QR IMAGE -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=HomeServicePayment"
+     class="qr-img">
+
+                <form action="/pay/{{booking[0]}}" method="POST">
+
+                    <input type="hidden"
+                           name="amount"
+                           value="{{booking[2]}}">
+
+                    <input type="hidden"
+                           name="method"
+                           value="UPI">
+
+                    <input type="text"
+                           name="upi_id"
+                           placeholder="Enter UPI ID"
+                           required>
+
+                    <button class="upi-btn">
+                        I Have Paid
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- CARD PAYMENT -->
+            <div class="payment-box">
+
+                <h3 style="color:#34495e;">
+                    💳 Card Payment
+                </h3>
+
+                <form action="/pay/{{booking[0]}}" method="POST">
+
+                    <input type="hidden"
+                           name="amount"
+                           value="{{booking[2]}}">
+
+                    <input type="hidden"
+                           name="method"
+                           value="Card">
+
+                    <input type="text"
+                           name="card_name"
+                           placeholder="Card Holder Name"
+                           required>
+
+                    <input type="text"
+                           name="card_number"
+                           placeholder="Card Number"
+                           required>
+
+                    <div style="display:flex; gap:10px;">
+
+                        <input type="text"
+                               name="expiry"
+                               placeholder="MM/YY"
+                               required>
+
+                        <input type="text"
+                               name="cvv"
+                               placeholder="CVV"
+                               required>
+
+                    </div>
+
+                    <button class="card-btn">
+                        Pay Securely
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div style="text-align:center; margin-top:25px;">
+
+            <a href="/my_bookings"
+               class="btn btn-secondary">
+
+               Cancel & Return
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

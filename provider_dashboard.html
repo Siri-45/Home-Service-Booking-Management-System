@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Provider Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body{
+            background:#f1f5f9;
+            font-family:'Segoe UI';
+        }
+
+        .header{
+            background:#0f172a;
+            color:white;
+            padding:15px 30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .container{
+            margin-top:30px;
+        }
+
+        .card{
+            border:none;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom:20px;
+            padding:20px;
+        }
+
+        .btn-accept{
+            background:#16a34a;
+            color:white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h3>Provider Dashboard</h3>
+
+    <a href="/logout" class="btn btn-danger">
+        Logout
+    </a>
+
+</div>
+
+<div class="container">
+
+    <h4 class="mb-4">
+        Service Bookings
+    </h4>
+
+    {% for b in bookings %}
+
+<div class="card">
+
+    <h4>{{b[2]}}</h4>
+
+    <p><b>Customer:</b> {{b[1]}}</p>
+
+    <p><b>Date:</b> {{b[3]}}</p>
+
+    <p><b>Status:</b> {{b[4]}}</p>
+
+    {% if b[4] != 'Completed' %}
+
+    <a href="/provider_complete/{{b[0]}}"
+       class="btn btn-success">
+
+       Mark Completed
+
+    </a>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>

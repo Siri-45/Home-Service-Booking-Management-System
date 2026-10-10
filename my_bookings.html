@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>My Bookings</title>
+
+    <style>
+
+        body{
+            font-family:'Segoe UI',sans-serif;
+            background:linear-gradient(135deg,#eef2f7,#dbe6f6);
+            margin:0;
+        }
+
+        .header{
+
+            background:#1e293b;
+            color:white;
+            padding:15px 25px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+        }
+
+        .container{
+            padding:25px;
+        }
+
+        .card{
+
+            background:white;
+            padding:20px;
+            margin-bottom:20px;
+            border-radius:12px;
+            box-shadow:0 6px 15px rgba(0,0,0,0.08);
+
+        }
+
+        .btn{
+
+            padding:10px 14px;
+            text-decoration:none;
+            border-radius:6px;
+            color:white;
+            display:inline-block;
+            margin-top:10px;
+
+        }
+
+        .btn-success{
+            background:#10b981;
+        }
+
+        .btn-danger{
+            background:#ef4444;
+        }
+
+        .btn-primary{
+            background:#3b82f6;
+        }
+
+        .btn-secondary{
+            background:#64748b;
+        }
+
+        .status{
+
+            padding:5px 10px;
+            border-radius:6px;
+            font-size:13px;
+            font-weight:bold;
+            color:white;
+
+        }
+
+        .Pending{
+            background:#f59e0b;
+        }
+
+        .Assigned{
+            background:#2563eb;
+        }
+
+        .Completed{
+            background:#10b981;
+        }
+
+        .Cancelled{
+            background:#ef4444;
+        }
+
+        .paid{
+            color:green;
+            font-weight:bold;
+        }
+
+        .unpaid{
+            color:red;
+            font-weight:bold;
+        }
+
+        .provider-box{
+
+            margin-top:15px;
+            padding:12px;
+            background:#f8fafc;
+            border-radius:10px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h3>My Bookings</h3>
+
+    <div>
+
+        <a href="/dashboard" class="btn btn-primary">
+            Dashboard
+        </a>
+
+        <a href="/logout" class="btn btn-danger">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<!-- BOOKINGS -->
+
+<div class="container">
+
+{% if bookings %}
+
+    {% for b in bookings %}
+
+    <div class="card">
+
+        <h3>{{b[1]}}</h3>
+
+        <p>
+            <b>Date:</b>
+            {{b[2]}}
+        </p>
+
+        <p>
+            <b>Time Slot:</b>
+            {{b[3]}}
+        </p>
+
+        <p>
+
+            <b>Status:</b>
+
+            <span class="status {{b[4]}}">
+                {{b[4]}}
+            </span>
+
+        </p>
+
+        <p>
+
+            <b>Amount:</b>
+            ₹{{b[5]}}
+
+        </p>
+
+        <p>
+
+            <b>Payment:</b>
+
+            {% if b[6] == 'Paid' %}
+
+                <span class="paid">
+                    Paid
+                </span>
+
+            {% else %}
+
+                <span class="unpaid">
+                    Unpaid
+                </span>
+
+            {% endif %}
+
+        </p>
+
+        <!-- PROVIDER DETAILS -->
+
+        {% if b[7] %}
+
+        <div class="provider-box">
+
+            <h4>Provider Details</h4>
+
+            <p>
+                <b>Name:</b>
+                {{b[7]}}
+            </p>
+
+            <p>
+                <b>Phone:</b>
+                {{b[8]}}
+            </p>
+
+        </div>
+
+        {% else %}
+
+        <p style="color:red;font-weight:bold;">
+            Provider Not Assigned Yet
+        </p>
+
+        {% endif %}
+
+        <!-- PAYMENT BUTTON -->
+
+        {% if b[4] == 'Assigned' and b[6] == 'Pending' %}
+
+            <a href="/payment/{{b[0]}}" class="btn btn-success">
+                Proceed To Payment
+            </a>
+
+        {% elif b[6] == 'Paid' %}
+
+            <button class="btn btn-secondary">
+                Payment Completed
+            </button>
+
+        {% endif %}
+
+        <!-- CANCEL BUTTON -->
+
+        {% if b[4] == 'Pending' %}
+
+            <a href="/cancel_booking/{{b[0]}}" class="btn btn-danger">
+                Cancel Booking
+            </a>
+
+        {% endif %}
+
+        {% if b[4] != 'Completed' and b[4] != 'Cancelled' %}
+<a href="/reschedule/{{b[0]}}" class="btn btn-primary">
+    Reschedule
+</a>
+{% endif %}
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <div class="card">
+
+        <h3>No Bookings Found</h3>
+
+    </div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
